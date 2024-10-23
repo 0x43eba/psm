@@ -63,8 +63,6 @@ int socket_listener() {
 
         struct PSM_Header *header = (struct PSM_Header *)buffer;
 
-        unsigned char checksum = 0;
-
         if (validate_header(header, message_length) < 0) {
             continue;
         }

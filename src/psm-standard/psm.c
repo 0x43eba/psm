@@ -15,4 +15,6 @@ int message_checksum(struct PSM_Header *header, char *buffer, ssize_t message_le
         fprintf(stderr, "received a message with an invalid checksum\n");
         return -1;
     }
+
+    return 0;
 }
