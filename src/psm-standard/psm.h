@@ -6,8 +6,15 @@
 #define PSM_MAX_MESSAGE_SIZE 1024 * 64
 
 #define CURRENT_VERSION 0x01
-#define MAX_VERSION 0xFF
+#define PSM_MAX_VERSION 0x01
 
 #define PSM_MAGIC 0x43
+
+struct PSM_Header {
+    unsigned short magic;
+    unsigned char version;
+    unsigned long message_length;
+    unsigned char checksum;
+};
 
 #endif
