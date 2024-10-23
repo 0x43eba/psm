@@ -10,11 +10,6 @@
 
 #define PSM_MAGIC 0x43
 
-struct PSM_Header {
-    unsigned short magic;
-    unsigned char version;
-    unsigned long message_length;
-    unsigned char checksum;
-};
+int message_checksum(struct PSM_Header *header, char *buffer, ssize_t message_length);
 
 #endif

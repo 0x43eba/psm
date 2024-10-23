@@ -2,6 +2,6 @@
 
 #define SERVER_H
 
-int socket_listener(short port);
+int socket_listener();
 
 #endif

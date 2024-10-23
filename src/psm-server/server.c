@@ -4,7 +4,29 @@
 #include <unistd.h>
 #include <arpa/inet.h>
 
+#include "../psm-standard/psm_header.h"
 #include "../psm-standard/psm.h"
+
+
+int validate_header(struct PSM_Header *header, ssize_t message_length) {
+
+    if (header->magic != PSM_MAGIC) {
+        fprintf(stderr, "received a message with an invalid magic number\n");
+        return -1;
+    }
+
+    if (header->version > PSM_MAX_VERSION) {
+        fprintf(stderr, "received a message with an invalid version number\n");
+        return -1;
+    }
+
+    if (header->message_length != message_length - sizeof(struct PSM_Header)) {
+        fprintf(stderr, "received a message with an invalid message length\n");
+        return -1;
+    }
+
+    return 0;
+}
 
 int socket_listener() {
     int success = socket(AF_INET, SOCK_DGRAM, 0);
@@ -41,29 +63,13 @@ int socket_listener() {
 
         struct PSM_Header *header = (struct PSM_Header *)buffer;
 
-        if (header->magic != PSM_MAGIC) {
-            fprintf(stderr, "received a message with an invalid magic number\n");
-            continue;
-        }
-
-        if (header->version > PSM_MAX_VERSION) {
-            fprintf(stderr, "received a message with an invalid version number\n");
-            continue;
-        }
-
-        if (header->message_length != message_length - sizeof(struct PSM_Header)) {
-            fprintf(stderr, "received a message with an invalid message length\n");
-            continue;
-        }
-
         unsigned char checksum = 0;
 
-        for (size_t i = 0; i < message_length; i++) {
-            checksum ^= buffer[i];
+        if (validate_header(header, message_length) < 0) {
+            continue;
         }
 
-        if (header->checksum != checksum) {
-            fprintf(stderr, "received a message with an invalid checksum\n");
+        if (message_checksum(header, buffer, message_length) < 0) {
             continue;
         }
 

@@ -3,5 +3,5 @@
 #include "server.h"
 
 int main(void) {
-    socket_listener(1867);
+    socket_listener();
 }
