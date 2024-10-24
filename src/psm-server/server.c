@@ -67,7 +67,7 @@ int socket_listener() {
             continue;
         }
 
-        if (message_checksum(header, buffer, message_length) < 0) {
+        if (message_checksum_validate(header, buffer, message_length) < 0) {
             continue;
         }
 

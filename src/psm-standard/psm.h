@@ -1,3 +1,4 @@
+#include <sys/_types/_ssize_t.h>
 #ifndef PSM_H
 
 #define PSM_H
@@ -10,6 +11,9 @@
 
 #define PSM_MAGIC 0x43
 
-int message_checksum(struct PSM_Header *header, char *buffer, ssize_t message_length);
+unsigned char compute_checksum(char *buffer, ssize_t message_length);
+
+int message_checksum_validate(struct PSM_Header *header, char *buffer, ssize_t message_length) ;
+
 
 #endif
